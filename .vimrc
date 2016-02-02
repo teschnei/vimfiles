@@ -44,3 +44,22 @@ let g:annoyme_with = {
   \ 'i': {'<BS>': [],
   \       '<Del>': []}
 \}
+
+" Workaround for annoying bug when parsing ruby syntax regexp...
+  augroup RubyRegex
+    au!
+    au BufReadPre *.rb setlocal regexpengine=1
+    au BufWinEnter *.rb setlocal regexpengine=0
+  augroup END
+
+" vim -b : edit binary using xxd-format!
+  augroup Binary
+    au!
+    au BufReadPre  *.exe let &bin=1
+    au BufReadPost *.exe if &bin | %!xxd
+    au BufReadPost *.exe set ft=xxd | endif
+    au BufWritePre *.exe if &bin | %!xxd -r
+    au BufWritePre *.exe endif
+    au BufWritePost *.exe if &bin | %!xxd
+    au BufWritePost *.exe set nomod | endif
+  augroup END
